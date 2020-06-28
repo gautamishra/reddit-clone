@@ -9,9 +9,15 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.learning.redit.dto.AuthenticationResponse;
+import com.learning.redit.dto.LoginRequest;
 import com.learning.redit.dto.RegisterRequest;
 import com.learning.redit.exception.RedditException;
 import com.learning.redit.modal.NotificationEmail;
@@ -37,6 +43,9 @@ public class AuthServcie {
 	
 	@Autowired
 	private MailContentBuilder mailContentBuilder;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
     @Transactional
     public void signup(RegisterRequest registerRequest) {
@@ -70,6 +79,15 @@ public class AuthServcie {
     	return token;
     }
     
+    
+    public AuthenticationResponse login(LoginRequest loginRequest) {
+    	Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+    	loginRequest.getPassword()));
+    	SecurityContextHolder.getContext().setAuthentication(authenticate);
+//    	String authenticationToken = jwtProvider.generateToken(authenticate);
+    	return new AuthenticationResponse("", loginRequest.getUsername());
+
+    }
     
     public void verifyAccount(String token) {
     	System.out.println(token);

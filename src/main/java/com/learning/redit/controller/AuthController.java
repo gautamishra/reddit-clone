@@ -10,8 +10,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.learning.redit.dto.AuthenticationResponse;
+import com.learning.redit.dto.LoginRequest;
 import com.learning.redit.dto.RegisterRequest;
 import com.learning.redit.service.AuthServcie;
+
+/**
+ * Authentication process
+ * @author gmishra
+ *
+ */
 
 @RestController
 @RequestMapping("/api/auth")
@@ -21,15 +29,21 @@ public class AuthController {
 	private AuthServcie authService;
 	
 	@PostMapping("/signup")
-    public ResponseEntity signup(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
         authService.signup(registerRequest);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity("User Registration Success" , HttpStatus.OK);
     }
 	
-	  @GetMapping("accountVerification/{token}")
-	  public ResponseEntity<String> verifyAccount(@PathVariable String token) {
-	  authService.verifyAccount(token);
-	  return new ResponseEntity<>("Account Activated Successully", HttpStatus.OK);
-	  }
+  @GetMapping("accountVerification/{token}")
+  public ResponseEntity<String> verifyAccount(@PathVariable String token) {
+  authService.verifyAccount(token);
+  return new ResponseEntity<>("Account Activated Successully", HttpStatus.OK);
+  }
+	  
+  @PostMapping("/login")
+  public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
+      return authService.login(loginRequest);
+  }
+	  
 	
 }
