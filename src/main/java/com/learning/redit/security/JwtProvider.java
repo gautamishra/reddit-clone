@@ -6,15 +6,20 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import io.jsonwebtoken.Jwts;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+
 import com.learning.redit.exception.RedditException;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 
 
 @Component
@@ -46,5 +51,30 @@ public class JwtProvider {
 		} catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
 		throw new RedditException("Exception occured while retrieving public key from keystore");
 		}
-		}
+	}
+	
+    public boolean validateToken(String jwt) {
+    	 Jwts.parserBuilder().setSigningKey(getPublickey()).build().parseClaimsJws(jwt);
+        return true;
+    }
+
+    private PublicKey getPublickey() {
+        try {
+            return keyStore.getCertificate("reditclone").getPublicKey();
+        } catch (KeyStoreException e) {
+            throw new RedditException("Exception occured while retrieving public key from keystore");
+        }
+    }
+
+    public String getUsernameFromJWT(String token) {
+    	Claims claims = Jwts.parserBuilder()
+    					.setSigningKey(getPublickey())
+    					.build()
+    					.parseClaimsJws(token)
+    					.getBody();
+
+        return claims.getSubject();
+    }
+	
+	
 }
