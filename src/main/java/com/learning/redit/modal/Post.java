@@ -12,9 +12,16 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
-import com.sun.istack.internal.Nullable;
+import org.springframework.lang.Nullable;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Post {
 
 		
@@ -27,9 +34,11 @@ public class Post {
 	
 	@Nullable
     private String url;
+	
     @Nullable
     @Lob
     private String description;
+    
     private Integer voteCount;
     
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,5 +50,6 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id")
     private Subreddit subreddit;
+ 
     
 }
