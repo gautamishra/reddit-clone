@@ -1,26 +1,21 @@
 package com.learning.redit.dto;
 
+import java.time.Instant;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class AuthenticationResponse {
+	
 	  private String authenticationToken;
-	  private String username;
-	 
-  public AuthenticationResponse(String authToken , String username){
-	  this.authenticationToken = authToken;
-	  this.username = username;
-  }
-	  
-	public String getAuthenticationToken() {
-		return authenticationToken;
-	}
-	public void setAuthenticationToken(String authenticationToken) {
-		this.authenticationToken = authenticationToken;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	  
-	  
+	  private String refreshToken;
+	  private Instant expiresAt;
+	  private String username;  
+
 }

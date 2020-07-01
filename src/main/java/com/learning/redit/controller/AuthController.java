@@ -1,5 +1,7 @@
 package com.learning.redit.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.learning.redit.dto.AuthenticationResponse;
 import com.learning.redit.dto.LoginRequest;
+import com.learning.redit.dto.RefreshTokenRequest;
 import com.learning.redit.dto.RegisterRequest;
 import com.learning.redit.service.AuthServcie;
+import com.learning.redit.service.RefreshTokenService;
 
 /**
  * Authentication process
@@ -27,6 +31,9 @@ public class AuthController {
 	
 	@Autowired
 	private AuthServcie authService;
+	
+	@Autowired
+	private RefreshTokenService refreshTokenService;
 	
 	@PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
@@ -45,5 +52,16 @@ public class AuthController {
       return authService.login(loginRequest);
   }
 	  
+  @PostMapping("refresh/token")
+  public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+  return authService.refreshToken(refreshTokenRequest);
+  }
 	
+  
+  @PostMapping("/logout")
+  public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+	  System.out.println("goif to delete");
+	  refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
+	  return ResponseEntity.status(HttpStatus.OK).body("Refresh Token Deleted Successfully!!");
+  }
 }
