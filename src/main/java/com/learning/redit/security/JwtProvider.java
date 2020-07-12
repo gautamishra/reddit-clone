@@ -98,7 +98,7 @@ public class JwtProvider {
 				.signWith(getPrivateKey())
 				.setExpiration(Date.from(Instant.now().plusMillis(getJwtExpirationInMillis())))
 				.compact();
-		return null;
+		return jws;
 	}
 	
 }

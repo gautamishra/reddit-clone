@@ -91,6 +91,7 @@ public class AuthServcie {
     
     
     public AuthenticationResponse login(LoginRequest loginRequest) {
+    	System.out.println(loginRequest.getUsername());
     	Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
     	loginRequest.getPassword()));
     	SecurityContextHolder.getContext().setAuthentication(authenticate);
@@ -132,7 +133,7 @@ public class AuthServcie {
 	public AuthenticationResponse refreshToken(@Valid RefreshTokenRequest refreshTokenRequest) {
 		refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
 		String token = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
-				
+		System.out.println("new token is " + token);
 		return AuthenticationResponse.builder()
 				.authenticationToken(token)
 				.username(refreshTokenRequest.getUsername())

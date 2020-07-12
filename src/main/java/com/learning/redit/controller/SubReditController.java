@@ -16,7 +16,7 @@ import com.learning.redit.dto.SubReditDto;
 import com.learning.redit.service.SubReditService;
 
 @RestController
-@RequestMapping("/api/subredit")
+@RequestMapping("/api/subreddit")
 public class SubReditController {
 	
 	@Autowired
